@@ -37,6 +37,27 @@
       </form>
     </div>
   </div>
+
+
+  <!-- 模态框 -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">友情提示</h4>
+        </div>
+        <div class="modal-body">
+          <p>密码没输&hellip;</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal">确认</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
   <script>
     //入口函数 : DOM树加载完毕
     $(function () {
@@ -57,7 +78,11 @@
         var password = $('.input_pass').val();
         //3.非空判断
         if (username.length == 0 || password.length == 0) {
-          alert('请输入用户名和密码');
+          //alert('请输入用户名和密码');
+          //(1)设置模态框提示文本
+          $('.modal-body>p').text('请输入用户名和密码');
+          //（2）弹出bootstrap模态框
+          $('#myModal').modal();
           return;
         };
         //4.ajax发送服务器
@@ -72,12 +97,29 @@
           success: function (backData) {
             //5.数据响应之后 跳转首页
             console.log(backData);
-            if(backData.code == 200){
-              alert('登录成功');
-              //跳转首页
-              window.location.href = './index.html';
-            }else{
-              alert(backData.msg);
+            if (backData.code == 200) {
+              //alert('登录成功');
+              //(1)设置模态框文本
+              $('.modal-body>p').text('登录成功');
+              //（2）弹出bootstrap模态框
+              $('#myModal').modal();
+              /* 
+              细节 ： 模态框一出来页面就跳转，导致用户看不到模态框
+              解决方案：等模态框出来，用户点击模态框的确认按钮再跳转
+               */
+              //（3）给模态框注册消失事件
+              $('#myModal').on('hidden.bs.modal', function (e) {
+                // do something...
+                //跳转首页
+                window.location.href = './index.html';
+              })
+
+            } else {
+              // alert(backData.msg);
+              //(1)设置模态框文本
+              $('.modal-body>p').text(backData.msg);
+              //（2）弹出bootstrap模态框
+              $('#myModal').modal();
             }
           }
         });
