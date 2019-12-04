@@ -68,7 +68,7 @@
       3.非空判断
       4.ajax发送服务器
       5.数据响应之后 跳转首页
-       */
+      */
       //1.给登录按钮注册点击事件
       $('.input_sub').click(function (e) {
         //表单按钮需要阻止默认跳转
@@ -98,6 +98,16 @@
             //5.数据响应之后 跳转首页
             console.log(backData);
             if (backData.code == 200) {
+              /* 使用localstorage将token存储到本地
+              * sessionstorage与localstorage的区别
+                相同点 ： 作用一致都是存储数据
+                不同点 ： 存储方式不同
+                  sessionstorage ： 存储在内存中 （hp值只有一条命）
+                  localstorage : 存储在硬盘中  （hp值无限条命）
+               */
+              localStorage.setItem('token',backData.token);
+
+
               //alert('登录成功');
               //(1)设置模态框文本
               $('.modal-body>p').text('登录成功');
