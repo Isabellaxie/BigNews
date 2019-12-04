@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <a href="http://www.jd.com" target="_blank" id="btn">点我啊</a>
+
+    <script src="./libs/jquery-1.12.4.min.js"></script>
+    <script>
+
+        //1.DOM注册事件   
+        btn.onclick = function(){
+            this.style.border = '5px solid red';
+        };
+
+        //1.1 DOM主动触发事件
+        //btn.onclick();
+
+         //1.2 DOM的click()方法   =  注册事件 + 默认事件
+        // btn.click();
+
+        //2.jq注册事件
+        // $('#btn').click(function(){ //等价于原生的btn.onclick = function(){}
+        //     this.style.border = '5px solid green';
+        // });
+
+        //2.1 jq触发事件
+        //$('#btn').click();//等价于原生的btn.onclick()
+    </script>
+</body>
+</html>
