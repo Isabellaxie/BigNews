@@ -82,6 +82,37 @@
                 window.location.href = './login.html';
             });
 
+            /* 3.左侧导航栏一级菜单点击高亮 */
+            $('.level01').click(function(){
+                //(1)排他思想修改样式
+                $(this).addClass('active').siblings().removeClass('active');
+                //(2)如果是文章管理div，还需要有下拉的动画
+                if($(this).index() == 1){
+                    //a. 上下滑动动画
+                    $('.level02').slideToggle();
+                    //b. 右侧箭头向下旋转
+                    $('.icon-arrowdownl').toggleClass('rotate0');
+                    //c.默认选中第一个 :主动触发第一个li元素点击事件
+                    /* 
+                    1.发现问题 ： 主动触发第一个li元素的点击事件， 只有高亮效果，没有跳转效果
+                    2.分析问题 ： 改颜色是点击事件 ， 跳转是a标签的默认行为
+                        jq的click事件只能（1）触发元素注册的事件  （2）无法触发元素的默认行为
+                    3.解决问题 ： 同时触发 (1)注册的事件：改颜色  (2)默认事件 ： 跳转
+                        原生的DOM对象也有一个click方法，同时触发注册的事件和默认事件
+                    */
+                    $('.level02>li a:eq(0)')[0].click();//注意：要选中a标签哟 因为a标签才有默认跳转事件
+
+                }else{//如果不是文章管理，默认取消所有二级菜单高亮
+                    $('.level02>li').removeClass('active');
+                }
+            });
+
+            /* 4.左侧导航栏二级菜单点击高亮 */
+            $('.level02>li').click(function(){
+                //(1)排他思想修改样式
+                $(this).addClass('active').siblings().removeClass('active');
+            });
+
             
 
             // //(1).实例化ajax对象
