@@ -150,7 +150,7 @@
                     $('#recipient-name').val($(target).parent().prev().prev().text());
                     $('#message-text').val($(target).parent().prev().text());
                     //(3)把编辑按钮的data-id 赋值给 模态框确认按钮
-                    $('#myModal .btn-primary').attr('data-id',$(target).attr('data-id'));   
+                    $('#myModal .btn-primary').attr('data-id', $(target).attr('data-id'));
                 }
             });
 
@@ -166,37 +166,37 @@
                 if ($(this).text() == '新增') {
                     /* 2.新增分类 */
                     $.ajax({
-                        url:BigNew.category_add,
-                        type:'post',
-                        dataType:'json',
-                        data:{
-                            name:$('#recipient-name').val(),
-                            slug:$('#message-text').val(),
+                        url: BigNew.category_add,
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            name: $('#recipient-name').val(),
+                            slug: $('#message-text').val(),
                         },
-                        success: function(backData){
+                        success: function (backData) {
                             console.log(backData);
-                            if(backData.code == 201){
+                            if (backData.code == 201) {
                                 alert('新增成功');
                                 //刷新当前页面
                                 window.location.reload();
                             }
-                            
+
                         }
                     });
                 } else {
                     /* 3.编辑分类 */
                     $.ajax({
-                        url:BigNew.category_edit,
-                        type:'post',
-                        dataType:'json',
-                        data:{
-                            id:$(this).attr('data-id'),
-                            name:$('#recipient-name').val(),
-                            slug:$('#message-text').val(),
+                        url: BigNew.category_edit,
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            id: $(this).attr('data-id'),
+                            name: $('#recipient-name').val(),
+                            slug: $('#message-text').val(),
                         },
-                        success: function(backData){
+                        success: function (backData) {
                             console.log(backData);
-                            if(backData.code == 200){
+                            if (backData.code == 200) {
                                 alert('修改成功');
                                 //刷新当前页面
                                 window.location.reload();
@@ -211,28 +211,27 @@
             /* 4.删除分类
             注意点： 删除按钮是ajax动态添加，需要注册委托事件
             */
-           $('.table>tbody').on('click','.btn-delete',function(){
-               //(1)获取当前点击的按钮的data-id
-               var id = $(this).attr('data-id');
-               console.log(id);
-               //(2)ajax请求
-               $.ajax({
-                   url:BigNew.category_delete,
-                   type:'post',
-                   dataType:'json',
-                   data:{id:id},
-                   success: function(backData){
-                    console.log(backData);
-                    if(backData.code == 204){
-                        alert('删除成功');
-                        //刷新当前页面
-                        window.location.reload();
+            $('.table>tbody').on('click', '.btn-delete', function () {
+                //(1)获取当前点击的按钮的data-id
+                var id = $(this).attr('data-id');
+                console.log(id);
+                //(2)ajax请求
+                $.ajax({
+                    url: BigNew.category_delete,
+                    type: 'post',
+                    dataType: 'json',
+                    data: { id: id },
+                    success: function (backData) {
+                        console.log(backData);
+                        if (backData.code == 204) {
+                            alert('删除成功');
+                            //刷新当前页面
+                            window.location.reload();
+                        }
                     }
-                    
-                   }
-               });
-               
-           });
+                });
+
+            });
         });
     </script>
 
