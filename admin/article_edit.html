@@ -22,15 +22,6 @@
     <!-- 初始化 -->
     <script src="./libs/config.js"></script>
 
-    <style>
-        .w-e-menu {
-            z-index: 2 !important;
-        }
-
-        .w-e-text-container {
-            z-index: 1 !important;
-        }
-    </style>
 </head>
 
 <body>
@@ -72,7 +63,7 @@
                         <div class="jeinpbox">
                             <input type="text" class="jeinput" id="testico" placeholder="YYYY-MM-DD">
                             <div class="icons jebtns"
-                                onclick="jeDate('#testico',{trigger:false,format: 'YYYY-MM-DD',theme:{bgcolor:'#C81623',pnColor:'#FF6653'}},)">
+                                onclick="jeDate('#testico',{trigger:false,format: 'YYYY-MM-DD',theme:{bgcolor:'#C81623',pnColor:'#FF6653'},zIndex:10002,},)">
                             </div>
                         </div>
                     </div>
@@ -103,7 +94,13 @@
 
     <script src="./libs/http.js"></script>
     <script>
-        /* 0:页面布局 ： 日期选择jedate  富文本编辑器：wangEditor */
+        /* 0:页面布局 ： 日期选择jedate  富文本编辑器：wangEditor
+        (1)发现问题 ： 日期选择插件无法选择日期
+        (2)分析问题 ： wangEditor的层级（zIndex）比 jedate层级要高
+        (3)解决问题 ： 设置日期插件层级  > wangEditor插件
+            方案一 ： 降低 wangEditor插件 的层级
+            方案二： 设置jedate插件的层级(官网文档)
+        */
 
         /* 1.获取从article_list.html页面传递的参数 ：文章id */
         var id = window.location.href.split('=')[1];

@@ -16,7 +16,8 @@
             theme: { bgcolor: "#C81623", pnColor: "#FF6653" },
             format: "YYYY-MM-DD",
             isinitVal: true,
-            festival: true,
+            festival: true, 
+            zIndex:10002,//设置弹出层的层级
         });
     });
 })(window);
