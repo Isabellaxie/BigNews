@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="css/main.css">
   <script src="./libs/jquery-1.12.4.min.js"></script>
   <script src="./libs/template-web.js"></script>
+  <!-- 分页插件 -->
+  <script src="./libs/jquery.twbsPagination.js"></script>
 </head>
 
 <body>
@@ -32,11 +34,12 @@
           </tr>
         </thead>
         <tbody>
-          
+
         </tbody>
       </table>
       <div class="row text-center">
-        <ul class="pagination pagination-sm">
+        <ul id="pagination" class="pagination-sm"></ul>
+        <!-- <ul class="pagination pagination-sm">
           <li class="page-item first disabled"><a href="#" class="page-link">首页</a></li>
           <li class="page-item prev disabled"><a href="#" class="page-link">上一页</a></li>
           <li class="page-item active"><a href="#" class="page-link">1</a></li>
@@ -49,7 +52,7 @@
           <li class="page-item next"><a href="#" class="page-link">下一页</a></li>
           <li class="page-item last"><a href="#" class="page-link">尾页</a></li>
         </ul>
-        <ul id="pagination" class="pagination-sm"></ul>
+        <ul id="pagination" class="pagination-sm"></ul> -->
       </div>
 
     </div>
@@ -65,12 +68,12 @@
         <td>{{ v.state }}</td>
         <td class="text-center">
             {{ if v.state == '待审核' }}
-            <a href="javascript:void(0);;" class="btn btn-info btn-xs btn-pass">审批</a>
+            <a href="javascript:void(0);;" data-id="{{ v.id }}" class="btn btn-info btn-xs btn-pass">审批</a>
             {{ else if v.state == '已通过' }}
-          <a href="javascript:void(0);;" class="btn btn-warning btn-xs btn-reject">拒绝</a>
+          <a href="javascript:void(0);;" data-id="{{ v.id }}" class="btn btn-warning btn-xs btn-reject">拒绝</a>
           {{ /if }}
           
-          <a href="javascript:void(0);;" class="btn btn-danger btn-xs btn-delete">删除</a>
+          <a href="javascript:void(0);;" data-id="{{ v.id }}" class="btn btn-danger btn-xs btn-delete">删除</a>
         </td>
       </tr>
       {{ /each }}
@@ -83,10 +86,7 @@
       /* 1.页面一加载：请求所有数据 */
       getCommentList(1);
 
-
-
-
-
+      /* 2.分页功能 */
       function getCommentList(currentPage) {
         $.ajax({
           url: BigNew.comment_list,
@@ -99,19 +99,102 @@
           success: function (backData) {
             console.log(backData);
             //模板引擎渲染页面
-            $('.table>tbody').html(template('com_list',backData));
+            $('.table>tbody').html(template('com_list', backData));
+            //加载分页插件
+            loadPagination(backData.data.totalPage, currentPage);
           }
         });
       }
 
+      function loadPagination(totalPage, startPage) {
+        //(1)先销毁旧的分页插件
+        $('#pagination').twbsPagination('destroy');
+        //(2)显示新的分页插件
+        $('#pagination').twbsPagination({
+          totalPages: totalPage,
+          startPage: startPage,
+          visiblePages: 6,
+          first: '首页',
+          prev: '上一页',
+          next: '下一页',
+          last: '尾页',
+          onPageClick: function (event, page) {
+            $('#page-content').text('Page ' + page);
+            console.log('您点击的页数为' + page);
+            if (page != startPage) {
+              getCommentList(page);
+            }
+          }
+        });
+      };
 
-      /* 2.分页功能 */
 
+
+      /* 
+      审批/拒绝/删除 ： 都是ajax动态添加，需要注册委托事件
+      */
       /* 3.审批 */
+      $('.table>tbody').on('click', '.btn-pass', function () {
+        //(1)获取当前点击的评论id
+        var id = $(this).attr('data-id');
+        //(2)ajax请求
+        $.ajax({
+          url: BigNew.comment_pass,
+          type: 'post',
+          dataType: 'json',
+          data: { id: id },
+          success: function (backData) {
+            console.log(backData);
+            if (backData.code == 200) {
+              alert('已通过');
+              //刷新页面
+              window.location.reload();
+            }
+          }
+        });
+      });
 
       /* 4.拒绝 */
+      $('.table>tbody').on('click', '.btn-reject', function () {
+        //(1)获取当前点击的评论id
+        var id = $(this).attr('data-id');
+        //(2)ajax请求
+        $.ajax({
+          url: BigNew.comment_reject,
+          type: 'post',
+          dataType: 'json',
+          data: { id: id },
+          success: function (backData) {
+            console.log(backData);
+            if (backData.code == 200) {
+              alert('已拒绝');
+              //刷新页面
+              window.location.reload();
+            }
+          }
+        });
+      });
 
       /* 5.删除 */
+      $('.table>tbody').on('click', '.btn-delete', function () {
+        //(1)获取当前点击的评论id
+        var id = $(this).attr('data-id');
+        //(2)ajax请求
+        $.ajax({
+          url: BigNew.comment_delete,
+          type: 'post',
+          dataType: 'json',
+          data: { id: id },
+          success: function (backData) {
+            console.log(backData);
+            if (backData.code == 200) {
+              alert('删除成功');
+              //刷新页面
+              window.location.reload();
+            }
+          }
+        });
+      });
     });
   </script>
 </body>
