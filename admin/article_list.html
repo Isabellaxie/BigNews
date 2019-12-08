@@ -227,6 +227,19 @@
                     }
                 });
             });
+
+            /* 4.发表文章按钮 */
+            $('#release_btn').click(function(){
+                //点击发表文章：侧边栏发表文章选项高亮
+                /* 
+                注意点： 如何在子窗口article_list页面 获取 父窗口index.html的DOM树
+                $(选择器,DOM树?) : 第二个参数默认值是 window.document
+                $(选择器,window.document) : 当前页面DOM树查找元素
+                $(选择器,window.parent.document) : 父页面DOM树查找元素
+                 */
+                
+                $('.level02>li:eq(1)',window.parent.document).addClass('active').siblings().removeClass('active');
+            });
         });
     </script>
 </body>
